@@ -1,9 +1,9 @@
 import { getBoundaryImageHeight } from '../boundary'
 import { TILE_SIZE, BUILDING_SPACE } from '../segments/constants'
 import { deleteStreetImage } from '../util/api'
-import store, { observeStore } from '../store'
+//import store, { observeStore } from '../store'
 import { drawStreetThumbnail } from './thumbnail'
-import { trimStreetData } from './data_model'
+//import { trimStreetData } from './data_model'
 
 // This can be adjusted to create much more hi-definition images
 const SAVE_AS_IMAGE_DPI = 2.0
@@ -76,11 +76,10 @@ export function getStreetImage(
   return el
 }
 
-// Save thumbnail if necessary every 30 minutes (1800000 ms)
-const SAVE_THUMBNAIL_TIME_INTERVAL = 1800000
-let _lastSavedTimestamp
-
 // Temporarily disabled. Commented out to prevent eslint errors.
+// // Save thumbnail if necessary every 30 minutes (1800000 ms)
+// const SAVE_THUMBNAIL_TIME_INTERVAL = 1800000
+// let _lastSavedTimestamp
 // let _savedThumbnail
 
 export const SAVE_THUMBNAIL_EVENTS = {
@@ -96,31 +95,32 @@ export function isThumbnailSaved() {
   return true
 }
 
+// TEMPORARILY DISABLED while saveStreetThumbnail is disabled
 export function initStreetThumbnailSubscriber() {
-  // Save street thumbnail on initial street render.
-  saveStreetThumbnail(
-    trimStreetData(store.getState().street),
-    SAVE_THUMBNAIL_EVENTS.INITIAL
-  )
-
-  const select = (state) => {
-    const street = { editCount: state.street.editCount, id: state.street.id }
-    return JSON.stringify(street)
-  }
-
-  const onChange = () => {
-    const timestamp = Date.now()
-    const timeElapsed = timestamp - _lastSavedTimestamp
-    // _savedThumbnail = false
-
-    // Save street thumbnail every 30 minutes if any changes to street.
-    if (timeElapsed && timeElapsed >= SAVE_THUMBNAIL_TIME_INTERVAL) {
-      const street = trimStreetData(store.getState().street)
-      saveStreetThumbnail(street, SAVE_THUMBNAIL_EVENTS.TIMER)
-    }
-  }
-
-  return observeStore(select, onChange)
+  // // Save street thumbnail on initial street render.
+  // saveStreetThumbnail(
+  //   trimStreetData(store.getState().street),
+  //   SAVE_THUMBNAIL_EVENTS.INITIAL
+  // )
+  //
+  // const select = (state) => {
+  //   const street = { editCount: state.street.editCount, id: state.street.id }
+  //   return JSON.stringify(street)
+  // }
+  //
+  // const onChange = () => {
+  //   const timestamp = Date.now()
+  //   const timeElapsed = timestamp - _lastSavedTimestamp
+  //   // _savedThumbnail = false
+  //
+  //   // Save street thumbnail every 30 minutes if any changes to street.
+  //   if (timeElapsed && timeElapsed >= SAVE_THUMBNAIL_TIME_INTERVAL) {
+  //     const street = trimStreetData(store.getState().street)
+  //     saveStreetThumbnail(street, SAVE_THUMBNAIL_EVENTS.TIMER)
+  //   }
+  // }
+  //
+  // return observeStore(select, onChange)
 }
 
 // Creates street thumbnail and uploads thumbnail to cloudinary.
